@@ -127,51 +127,51 @@ public interface AutoRestAzureSpecialParametersTestClient {
     void setGenerateClientRequestId(boolean generateClientRequestId);
 
     /**
-     * Gets the XMsClientRequestIdOperations object to access its operations.
-     * @return the XMsClientRequestIdOperations object.
+     * Gets the XMsClientRequestIds object to access its operations.
+     * @return the XMsClientRequestIds object.
      */
-    XMsClientRequestIdOperations getXMsClientRequestIdOperations();
+    XMsClientRequestIds xMsClientRequestIds();
 
     /**
-     * Gets the SubscriptionInCredentialsOperations object to access its operations.
-     * @return the SubscriptionInCredentialsOperations object.
+     * Gets the SubscriptionInCredentials object to access its operations.
+     * @return the SubscriptionInCredentials object.
      */
-    SubscriptionInCredentialsOperations getSubscriptionInCredentialsOperations();
+    SubscriptionInCredentials subscriptionInCredentials();
 
     /**
-     * Gets the SubscriptionInMethodOperations object to access its operations.
-     * @return the SubscriptionInMethodOperations object.
+     * Gets the SubscriptionInMethods object to access its operations.
+     * @return the SubscriptionInMethods object.
      */
-    SubscriptionInMethodOperations getSubscriptionInMethodOperations();
+    SubscriptionInMethods subscriptionInMethods();
 
     /**
-     * Gets the ApiVersionDefaultOperations object to access its operations.
-     * @return the ApiVersionDefaultOperations object.
+     * Gets the ApiVersionDefaults object to access its operations.
+     * @return the ApiVersionDefaults object.
      */
-    ApiVersionDefaultOperations getApiVersionDefaultOperations();
+    ApiVersionDefaults apiVersionDefaults();
 
     /**
-     * Gets the ApiVersionLocalOperations object to access its operations.
-     * @return the ApiVersionLocalOperations object.
+     * Gets the ApiVersionLocals object to access its operations.
+     * @return the ApiVersionLocals object.
      */
-    ApiVersionLocalOperations getApiVersionLocalOperations();
+    ApiVersionLocals apiVersionLocals();
 
     /**
-     * Gets the SkipUrlEncodingOperations object to access its operations.
-     * @return the SkipUrlEncodingOperations object.
+     * Gets the SkipUrlEncodings object to access its operations.
+     * @return the SkipUrlEncodings object.
      */
-    SkipUrlEncodingOperations getSkipUrlEncodingOperations();
+    SkipUrlEncodings skipUrlEncodings();
 
     /**
-     * Gets the OdataOperations object to access its operations.
-     * @return the OdataOperations object.
+     * Gets the Odatas object to access its operations.
+     * @return the Odatas object.
      */
-    OdataOperations getOdataOperations();
+    Odatas odatas();
 
     /**
-     * Gets the HeaderOperations object to access its operations.
-     * @return the HeaderOperations object.
+     * Gets the Headers object to access its operations.
+     * @return the Headers object.
      */
-    HeaderOperations getHeaderOperations();
+    Headers headers();
 
 }

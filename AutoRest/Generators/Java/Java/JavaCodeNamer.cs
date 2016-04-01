@@ -88,15 +88,14 @@ namespace Microsoft.Rest.Generator.Java
         #region naming
 
         /// <summary>
-        /// Skips name collision resolution for method groups (operations) as they get
-        /// renamed in template models.
+        /// Resolves name collisions in the client model for method groups (operations).
         /// </summary>
         /// <param name="serviceClient"></param>
         /// <param name="exclusionDictionary"></param>
         protected override void ResolveMethodGroupNameCollision(ServiceClient serviceClient,
             Dictionary<string, string> exclusionDictionary)
         {
-            // Do nothing   
+            // do nothing
         }
 
         public override string GetFieldName(string name)
@@ -125,7 +124,16 @@ namespace Microsoft.Rest.Generator.Java
         
         public override string GetMethodGroupName(string name)
         {
-            return PascalCase(name);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+            name = PascalCase(name);
+            if (!name.EndsWith("s", StringComparison.OrdinalIgnoreCase))
+            {
+                name += "s";
+            }
+            return name;
         }
 
         public override string GetEnumMemberName(string name)

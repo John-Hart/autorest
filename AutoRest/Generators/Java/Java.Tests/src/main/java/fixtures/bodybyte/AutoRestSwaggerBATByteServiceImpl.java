@@ -34,11 +34,11 @@ public final class AutoRestSwaggerBATByteServiceImpl extends ServiceClient imple
     }
 
     /**
-     * Gets the ByteOperations object to access its operations.
-     * @return the ByteOperations object.
+     * Gets the Bytes object to access its operations.
+     * @return the Bytes object.
      */
-    public ByteOperations getByteOperations() {
-        return new ByteOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public Bytes bytes() {
+        return new BytesImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**

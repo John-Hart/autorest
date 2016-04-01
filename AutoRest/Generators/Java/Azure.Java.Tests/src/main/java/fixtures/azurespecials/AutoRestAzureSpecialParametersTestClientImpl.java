@@ -154,67 +154,67 @@ public final class AutoRestAzureSpecialParametersTestClientImpl extends AzureSer
     }
 
     /**
-     * Gets the XMsClientRequestIdOperations object to access its operations.
-     * @return the XMsClientRequestIdOperations object.
+     * Gets the XMsClientRequestIds object to access its operations.
+     * @return the XMsClientRequestIds object.
      */
-    public XMsClientRequestIdOperations getXMsClientRequestIdOperations() {
-        return new XMsClientRequestIdOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public XMsClientRequestIds xMsClientRequestIds() {
+        return new XMsClientRequestIdsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the SubscriptionInCredentialsOperations object to access its operations.
-     * @return the SubscriptionInCredentialsOperations object.
+     * Gets the SubscriptionInCredentials object to access its operations.
+     * @return the SubscriptionInCredentials object.
      */
-    public SubscriptionInCredentialsOperations getSubscriptionInCredentialsOperations() {
-        return new SubscriptionInCredentialsOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public SubscriptionInCredentials subscriptionInCredentials() {
+        return new SubscriptionInCredentialsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the SubscriptionInMethodOperations object to access its operations.
-     * @return the SubscriptionInMethodOperations object.
+     * Gets the SubscriptionInMethods object to access its operations.
+     * @return the SubscriptionInMethods object.
      */
-    public SubscriptionInMethodOperations getSubscriptionInMethodOperations() {
-        return new SubscriptionInMethodOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public SubscriptionInMethods subscriptionInMethods() {
+        return new SubscriptionInMethodsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the ApiVersionDefaultOperations object to access its operations.
-     * @return the ApiVersionDefaultOperations object.
+     * Gets the ApiVersionDefaults object to access its operations.
+     * @return the ApiVersionDefaults object.
      */
-    public ApiVersionDefaultOperations getApiVersionDefaultOperations() {
-        return new ApiVersionDefaultOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public ApiVersionDefaults apiVersionDefaults() {
+        return new ApiVersionDefaultsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the ApiVersionLocalOperations object to access its operations.
-     * @return the ApiVersionLocalOperations object.
+     * Gets the ApiVersionLocals object to access its operations.
+     * @return the ApiVersionLocals object.
      */
-    public ApiVersionLocalOperations getApiVersionLocalOperations() {
-        return new ApiVersionLocalOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public ApiVersionLocals apiVersionLocals() {
+        return new ApiVersionLocalsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the SkipUrlEncodingOperations object to access its operations.
-     * @return the SkipUrlEncodingOperations object.
+     * Gets the SkipUrlEncodings object to access its operations.
+     * @return the SkipUrlEncodings object.
      */
-    public SkipUrlEncodingOperations getSkipUrlEncodingOperations() {
-        return new SkipUrlEncodingOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public SkipUrlEncodings skipUrlEncodings() {
+        return new SkipUrlEncodingsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the OdataOperations object to access its operations.
-     * @return the OdataOperations object.
+     * Gets the Odatas object to access its operations.
+     * @return the Odatas object.
      */
-    public OdataOperations getOdataOperations() {
-        return new OdataOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public Odatas odatas() {
+        return new OdatasImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
-     * Gets the HeaderOperations object to access its operations.
-     * @return the HeaderOperations object.
+     * Gets the Headers object to access its operations.
+     * @return the Headers object.
      */
-    public HeaderOperations getHeaderOperations() {
-        return new HeaderOperationsImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
+    public Headers headers() {
+        return new HeadersImpl(this.retrofitBuilder.client(clientBuilder.build()).build(), this);
     }
 
     /**
