@@ -38,7 +38,9 @@ class AutoRestComplexTestServiceConfiguration(Configuration):
             self, api_version, base_url=None, filepath=None):
 
         if api_version is None:
-            raise ValueError('api_version must not be None.')
+            raise ValueError("Parameter 'api_version' must not be None.")
+        if not isinstance(api_version, str):
+            raise TypeError("Parameter 'api_version' must be str.")
         if not base_url:
             base_url = 'http://localhost'
 
@@ -52,8 +54,8 @@ class AutoRestComplexTestServiceConfiguration(Configuration):
 class AutoRestComplexTestService(object):
     """Test Infrastructure for AutoRest
 
-    :param config: Configuration for client.
-    :type config: AutoRestComplexTestServiceConfiguration
+    :ivar config: Configuration for client.
+    :vartype config: AutoRestComplexTestServiceConfiguration
 
     :ivar basic_operations: BasicOperations operations
     :vartype basic_operations: .operations.BasicOperations
@@ -71,17 +73,23 @@ class AutoRestComplexTestService(object):
     :vartype polymorphicrecursive: .operations.Polymorphicrecursive
     :ivar readonlyproperty: Readonlyproperty operations
     :vartype readonlyproperty: .operations.Readonlyproperty
+
+    :param api_version: API ID.
+    :type api_version: str
+    :param str base_url: Service URL
+    :param str filepath: Existing config
     """
 
-    def __init__(self, config):
+    def __init__(
+            self, api_version, base_url=None, filepath=None):
 
-        self._client = ServiceClient(None, config)
+        self.config = AutoRestComplexTestServiceConfiguration(api_version, base_url, filepath)
+        self._client = ServiceClient(None, self.config)
 
         client_models = {k: v for k, v in models.__dict__.items() if isinstance(v, type)}
-        self._serialize = Serializer()
+        self._serialize = Serializer(client_models)
         self._deserialize = Deserializer(client_models)
 
-        self.config = config
         self.basic_operations = BasicOperations(
             self._client, self.config, self._serialize, self._deserialize)
         self.primitive = Primitive(

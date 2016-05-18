@@ -34,9 +34,13 @@ class AutoRestValidationTestConfiguration(Configuration):
             self, subscription_id, api_version, base_url=None, filepath=None):
 
         if subscription_id is None:
-            raise ValueError('subscription_id must not be None.')
+            raise ValueError("Parameter 'subscription_id' must not be None.")
+        if not isinstance(subscription_id, str):
+            raise TypeError("Parameter 'subscription_id' must be str.")
         if api_version is None:
-            raise ValueError('api_version must not be None.')
+            raise ValueError("Parameter 'api_version' must not be None.")
+        if not isinstance(api_version, str):
+            raise TypeError("Parameter 'api_version' must be str.")
         if not base_url:
             base_url = 'http://localhost'
 
@@ -51,22 +55,30 @@ class AutoRestValidationTestConfiguration(Configuration):
 class AutoRestValidationTest(object):
     """Test Infrastructure for AutoRest. No server backend exists for these tests.
 
-    :param config: Configuration for client.
-    :type config: AutoRestValidationTestConfiguration
+    :ivar config: Configuration for client.
+    :vartype config: AutoRestValidationTestConfiguration
+
+    :param subscription_id: Subscription ID.
+    :type subscription_id: str
+    :param api_version: Required string following pattern \\d{2}-\\d{2}-\\d{4}
+    :type api_version: str
+    :param str base_url: Service URL
+    :param str filepath: Existing config
     """
 
-    def __init__(self, config):
+    def __init__(
+            self, subscription_id, api_version, base_url=None, filepath=None):
 
-        self._client = ServiceClient(None, config)
+        self.config = AutoRestValidationTestConfiguration(subscription_id, api_version, base_url, filepath)
+        self._client = ServiceClient(None, self.config)
 
         client_models = {k: v for k, v in models.__dict__.items() if isinstance(v, type)}
-        self._serialize = Serializer()
+        self._serialize = Serializer(client_models)
         self._deserialize = Deserializer(client_models)
 
-        self.config = config
 
     def validation_of_method_parameters(
-            self, resource_group_name, id, custom_headers={}, raw=False, **operation_config):
+            self, resource_group_name, id, custom_headers=None, raw=False, **operation_config):
         """
         Validates input parameters on the method. See swagger for details.
 
@@ -123,7 +135,7 @@ class AutoRestValidationTest(object):
         return deserialized
 
     def validation_of_body(
-            self, resource_group_name, id, body=None, custom_headers={}, raw=False, **operation_config):
+            self, resource_group_name, id, body=None, custom_headers=None, raw=False, **operation_config):
         """
         Validates body parameters on the method. See swagger for details.
 
@@ -190,7 +202,7 @@ class AutoRestValidationTest(object):
         return deserialized
 
     def get_with_constant_in_path(
-            self, constant_param="constant", custom_headers={}, raw=False, **operation_config):
+            self, constant_param="constant", custom_headers=None, raw=False, **operation_config):
         """
 
         :param constant_param:
@@ -232,7 +244,7 @@ class AutoRestValidationTest(object):
             return client_raw_response
 
     def post_with_constant_in_body(
-            self, constant_param="constant", body=None, custom_headers={}, raw=False, **operation_config):
+            self, constant_param="constant", body=None, custom_headers=None, raw=False, **operation_config):
         """
 
         :param constant_param:

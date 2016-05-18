@@ -16,12 +16,15 @@ class StorageAccount(Resource):
     """
     The storage account.
 
-    :param id: Resource Id
-    :type id: str
-    :param name: Resource name
-    :type name: str
-    :param type: Resource type
-    :type type: str
+    Variables are only populated by the server, and will be ignored when
+    sending a request.
+
+    :ivar id: Resource Id
+    :vartype id: str
+    :ivar name: Resource name
+    :vartype name: str
+    :ivar type: Resource type
+    :vartype type: str
     :param location: Resource location
     :type location: str
     :param tags: Resource tags
@@ -29,11 +32,13 @@ class StorageAccount(Resource):
     :param provisioning_state: Gets the status of the storage account at the
      time the operation was called. Possible values include: 'Creating',
      'ResolvingDNS', 'Succeeded'
-    :type provisioning_state: str
+    :type provisioning_state: str or :class:`ProvisioningState
+     <storagemanagementclient.models.ProvisioningState>`
     :param account_type: Gets the type of the storage account. Possible
      values include: 'Standard_LRS', 'Standard_ZRS', 'Standard_GRS',
      'Standard_RAGRS', 'Premium_LRS'
-    :type account_type: str
+    :type account_type: str or :class:`AccountType
+     <storagemanagementclient.models.AccountType>`
     :param primary_endpoints: Gets the URLs that are used to perform a
      retrieval of a public blob, queue or table object.Note that StandardZRS
      and PremiumLRS accounts only return the blob endpoint.
@@ -45,7 +50,8 @@ class StorageAccount(Resource):
     :param status_of_primary: Gets the status indicating whether the primary
      location of the storage account is available or unavailable. Possible
      values include: 'Available', 'Unavailable'
-    :type status_of_primary: str
+    :type status_of_primary: str or :class:`AccountStatus
+     <storagemanagementclient.models.AccountStatus>`
     :param last_geo_failover_time: Gets the timestamp of the most recent
      instance of a failover to the secondary location. Only the most recent
      timestamp is retained. This element is not returned if there has never
@@ -60,7 +66,8 @@ class StorageAccount(Resource):
      secondary location of the storage account is available or unavailable.
      Only available if the accountType is StandardGRS or StandardRAGRS.
      Possible values include: 'Available', 'Unavailable'
-    :type status_of_secondary: str
+    :type status_of_secondary: str or :class:`AccountStatus
+     <storagemanagementclient.models.AccountStatus>`
     :param creation_time: Gets the creation date and time of the storage
      account in UTC.
     :type creation_time: datetime
@@ -77,6 +84,9 @@ class StorageAccount(Resource):
     """ 
 
     _validation = {
+        'id': {'readonly': True},
+        'name': {'readonly': True},
+        'type': {'readonly': True},
         'location': {'required': True},
     }
 
@@ -99,8 +109,8 @@ class StorageAccount(Resource):
         'secondary_endpoints': {'key': 'properties.secondaryEndpoints', 'type': 'Endpoints'},
     }
 
-    def __init__(self, location, id=None, name=None, type=None, tags=None, provisioning_state=None, account_type=None, primary_endpoints=None, primary_location=None, status_of_primary=None, last_geo_failover_time=None, secondary_location=None, status_of_secondary=None, creation_time=None, custom_domain=None, secondary_endpoints=None, **kwargs):
-        super(StorageAccount, self).__init__(id=id, name=name, type=type, location=location, tags=tags, **kwargs)
+    def __init__(self, location, tags=None, provisioning_state=None, account_type=None, primary_endpoints=None, primary_location=None, status_of_primary=None, last_geo_failover_time=None, secondary_location=None, status_of_secondary=None, creation_time=None, custom_domain=None, secondary_endpoints=None):
+        super(StorageAccount, self).__init__(location=location, tags=tags)
         self.provisioning_state = provisioning_state
         self.account_type = account_type
         self.primary_endpoints = primary_endpoints

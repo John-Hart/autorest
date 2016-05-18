@@ -35,7 +35,7 @@ class LROSADsOperations(object):
         self.config = config
 
     def put_non_retry400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 400 to the initial request
 
@@ -81,10 +81,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -120,7 +121,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_non_retry201_creating400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a Product with
         'ProvisioningState' = 'Creating' and 201 response code
@@ -167,10 +168,98 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
+            return self._client.send(
+                request, header_parameters, **operation_config)
+
+        def get_long_running_output(response):
+
+            if response.status_code not in [200, 201]:
+                exp = CloudError(response)
+                exp.request_id = response.headers.get('x-ms-request-id')
+                raise exp
+
+            deserialized = None
+
+            if response.status_code == 200:
+                deserialized = self._deserialize('Product', response)
+            if response.status_code == 201:
+                deserialized = self._deserialize('Product', response)
+
+            if raw:
+                client_raw_response = ClientRawResponse(deserialized, response)
+                return client_raw_response
+
+            return deserialized
+
+        if raw:
+            response = long_running_send()
+            return get_long_running_output(response)
+
+        long_running_operation_timeout = operation_config.get(
+            'long_running_operation_timeout',
+            self.config.long_running_operation_timeout)
+        return AzureOperationPoller(
+            long_running_send, get_long_running_output,
+            get_long_running_status, long_running_operation_timeout)
+
+    def put_non_retry201_creating400_invalid_json(
+            self, product=None, custom_headers=None, raw=False, **operation_config):
+        """
+        Long running put request, service returns a Product with
+        'ProvisioningState' = 'Creating' and 201 response code
+
+        :param product: Product to put
+        :type product: :class:`Product
+         <fixtures.acceptancetestslro.models.Product>`
+        :param dict custom_headers: headers that will be added to the request
+        :param bool raw: returns the direct response alongside the
+         deserialized response
+        :rtype:
+         :class:`AzureOperationPoller<msrestazure.azure_operation.AzureOperationPoller>`
+         instance that returns :class:`Product
+         <fixtures.acceptancetestslro.models.Product>`
+        :rtype: :class:`ClientRawResponse<msrest.pipeline.ClientRawResponse>`
+         if raw=true
+        """
+        # Construct URL
+        url = '/lro/nonretryerror/put/201/creating/400/invalidjson'
+
+        # Construct parameters
+        query_parameters = {}
+
+        # Construct headers
+        header_parameters = {}
+        header_parameters['Content-Type'] = 'application/json; charset=utf-8'
+        if self.config.generate_client_request_id:
+            header_parameters['x-ms-client-request-id'] = str(uuid.uuid1())
+        if custom_headers:
+            header_parameters.update(custom_headers)
+        if self.config.accept_language is not None:
+            header_parameters['accept-language'] = self._serialize.header("self.config.accept_language", self.config.accept_language, 'str')
+
+        # Construct body
+        if product is not None:
+            body_content = self._serialize.body(product, 'Product')
+        else:
+            body_content = None
+
+        # Construct and send request
+        def long_running_send():
+
+            request = self._client.put(url, query_parameters)
+            return self._client.send(
+                request, header_parameters, body_content, **operation_config)
+
+        def get_long_running_status(status_link, headers=None):
+
+            request = self._client.get(status_link)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -206,7 +295,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_async_relative_retry400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 with
         ProvisioningState=’Creating’. Poll the endpoint indicated in the
@@ -254,10 +343,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -298,7 +388,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete_non_retry400(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 400 with an error body
 
@@ -333,10 +423,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -367,7 +458,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete202_non_retry400(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 with a location
         header
@@ -403,10 +494,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -437,7 +529,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete_async_relative_retry400(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 to the initial
         request. Poll the endpoint indicated in the Azure-AsyncOperation
@@ -474,10 +566,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -509,7 +602,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post_non_retry400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 400 with no error body
 
@@ -554,10 +647,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -588,7 +682,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post202_non_retry400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 with a location header
 
@@ -633,10 +727,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -667,7 +762,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post_async_relative_retry400(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request Poll the endpoint indicated in the Azure-AsyncOperation
@@ -714,10 +809,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -749,7 +845,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_error201_no_provisioning_state_payload(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 201 to the initial request
         with no payload
@@ -796,10 +892,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -835,7 +932,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_async_relative_retry_no_status(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -884,10 +981,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -928,7 +1026,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_async_relative_retry_no_status_payload(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -977,10 +1075,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1021,7 +1120,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete204_succeeded(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 204 to the initial
         request, indicating success.
@@ -1057,10 +1156,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1087,7 +1187,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete_async_relative_retry_no_status(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 to the initial
         request. Poll the endpoint indicated in the Azure-AsyncOperation
@@ -1124,10 +1224,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1159,7 +1260,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post202_no_location(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request, without a location header.
@@ -1205,10 +1306,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1239,7 +1341,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post_async_relative_retry_no_payload(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -1287,10 +1389,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1322,7 +1425,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put200_invalid_json(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 to the initial
         request, with an entity that is not a valid json
@@ -1369,10 +1472,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1406,7 +1510,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_async_relative_retry_invalid_header(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -1454,10 +1558,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1498,7 +1603,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def put_async_relative_retry_invalid_json_polling(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running put request, service returns a 200 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -1547,10 +1652,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1591,7 +1697,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete202_retry_invalid_header(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 to the initial
         request receing a reponse with an invalid 'Location' and
@@ -1628,10 +1734,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1662,7 +1769,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete_async_relative_retry_invalid_header(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 to the initial
         request. The endpoint indicated in the Azure-AsyncOperation header is
@@ -1699,10 +1806,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1734,7 +1842,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def delete_async_relative_retry_invalid_json_polling(
-            self, custom_headers={}, raw=False, **operation_config):
+            self, custom_headers=None, raw=False, **operation_config):
         """
         Long running delete request, service returns a 202 to the initial
         request. Poll the endpoint indicated in the Azure-AsyncOperation
@@ -1771,10 +1879,11 @@ class LROSADsOperations(object):
             request = self._client.delete(url, query_parameters)
             return self._client.send(request, header_parameters, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1806,7 +1915,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post202_retry_invalid_header(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request, with invalid 'Location' and 'Retry-After' headers.
@@ -1852,10 +1961,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1886,7 +1996,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post_async_relative_retry_invalid_header(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -1933,10 +2043,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 
@@ -1968,7 +2079,7 @@ class LROSADsOperations(object):
             get_long_running_status, long_running_operation_timeout)
 
     def post_async_relative_retry_invalid_json_polling(
-            self, product=None, custom_headers={}, raw=False, **operation_config):
+            self, product=None, custom_headers=None, raw=False, **operation_config):
         """
         Long running post request, service returns a 202 to the initial
         request, with an entity that contains ProvisioningState=’Creating’.
@@ -2016,10 +2127,11 @@ class LROSADsOperations(object):
             return self._client.send(
                 request, header_parameters, body_content, **operation_config)
 
-        def get_long_running_status(status_link, headers={}):
+        def get_long_running_status(status_link, headers=None):
 
             request = self._client.get(status_link)
-            request.headers.update(headers)
+            if headers:
+                request.headers.update(headers)
             return self._client.send(
                 request, header_parameters, **operation_config)
 

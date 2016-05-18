@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using Microsoft.Rest.Generator.ClientModel;
 using Microsoft.Rest.Generator.Python.TemplateModels;
 using Microsoft.Rest.Generator.Utilities;
@@ -31,6 +32,19 @@ namespace Microsoft.Rest.Generator.Python
                 OperationName = serviceClient.Name;
             }
             AddCustomHeader = true;
+            string formatter;
+            foreach (var parameter in LocalParameters)
+            {
+                if (string.IsNullOrWhiteSpace(parameter.DefaultValue))
+                {
+                    parameter.DefaultValue = PythonConstants.None;
+                }
+            }
+            foreach (Match m in Regex.Matches(Url, @"\{[\w]+:[\w]+\}"))
+            {
+                formatter = m.Value.Split(':').First() + '}';
+                Url = Url.Replace(m.Value, formatter);
+            }
         }
 
         public bool AddCustomHeader { get; private set; }
@@ -151,7 +165,7 @@ namespace Microsoft.Rest.Generator.Python
 
             foreach (var parameter in LocalParameters)
             {
-                if (parameter.IsRequired && parameter.DefaultValue.Equals(PythonConstants.None))
+                if (parameter.IsRequired && parameter.DefaultValue == PythonConstants.None)
                 {
                     requiredDeclarations.Add(parameter.Name);
                 }
@@ -167,7 +181,7 @@ namespace Microsoft.Rest.Generator.Python
 
             if (addCustomHeaderParameters)
             {
-                declarations.Add("custom_headers={}");
+                declarations.Add("custom_headers=None");
             }
 
             declarations.Add("raw=False");
@@ -422,7 +436,8 @@ namespace Microsoft.Rest.Generator.Python
 
             foreach (var prop in headersType.Properties)
             {
-                if (this.ServiceClient.EnumTypes.Contains(prop.Type))
+                var enumType = prop.Type as EnumType;
+                if (this.ServiceClient.EnumTypes.Contains(prop.Type) && !enumType.ModelAsString)
                 {
                     builder.AppendLine(String.Format(CultureInfo.InvariantCulture, "'{0}': models.{1},", prop.SerializedName, prop.Type.ToPythonRuntimeTypeString()));
                 }
@@ -541,9 +556,10 @@ namespace Microsoft.Rest.Generator.Python
             }
 
             string result = "object";
-
+            var modelNamespace = ServiceClient.Name.ToPythonCase().Replace("_", "");
             var primaryType = type as PrimaryType;
             var listType = type as SequenceType;
+            var enumType = type as EnumType;
             if (primaryType != null)
             {
                 if (primaryType.Type == KnownPrimaryType.Stream)
@@ -559,9 +575,17 @@ namespace Microsoft.Rest.Generator.Python
             {
                 result = string.Format(CultureInfo.InvariantCulture, "list of {0}", GetDocumentationType(listType.ElementType));
             }
-            else if (type is EnumType)
+            else if (enumType != null)
             {
-                result = "str";
+                if (enumType == ReturnType.Body)
+                {
+                    if (enumType.ModelAsString)
+                        result = "str";
+                    else
+                        result = string.Format(CultureInfo.InvariantCulture, ":class:`{0} <{1}.models.{0}>`", enumType.Name, modelNamespace);
+                }
+                else
+                    result = string.Format(CultureInfo.InvariantCulture, "str or :class:`{0} <{1}.models.{0}>`", enumType.Name, modelNamespace);
             }
             else if (type is DictionaryType)
             {
@@ -569,7 +593,6 @@ namespace Microsoft.Rest.Generator.Python
             }
             else if (type is CompositeType)
             {
-                var modelNamespace = ServiceClient.Name.ToPythonCase().Replace("_", "");
                 if (!ServiceClient.Namespace.IsNullOrEmpty())
                     modelNamespace = ServiceClient.Namespace.ToPythonCase().Replace("_", "");
                 result = string.Format(CultureInfo.InvariantCulture, ":class:`{0} <{1}.models.{0}>`", type.Name, modelNamespace);

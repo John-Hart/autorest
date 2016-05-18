@@ -19,7 +19,8 @@ class Usage(Model):
     :param unit: Gets the unit of measurement. Possible values include:
      'Count', 'Bytes', 'Seconds', 'Percent', 'CountsPerSecond',
      'BytesPerSecond'
-    :type unit: str
+    :type unit: str or :class:`UsageUnit
+     <storagemanagementclient.models.UsageUnit>`
     :param current_value: Gets the current count of the allocated resources
      in the subscription.
     :type current_value: int
@@ -38,7 +39,7 @@ class Usage(Model):
         'name': {'key': 'name', 'type': 'UsageName'},
     }
 
-    def __init__(self, unit=None, current_value=None, limit=None, name=None, **kwargs):
+    def __init__(self, unit=None, current_value=None, limit=None, name=None):
         self.unit = unit
         self.current_value = current_value
         self.limit = limit

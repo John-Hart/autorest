@@ -45,9 +45,7 @@ sys.path.append(join(tests, "Validation"))
 from msrest.serialization import Deserializer
 from msrest.exceptions import DeserializationError, ValidationError
 
-from autorestvalidationtest import (
-    AutoRestValidationTest,
-    AutoRestValidationTestConfiguration)
+from autorestvalidationtest import AutoRestValidationTest
 from autorestvalidationtest.models import (
     Product,
     ConstantProduct,
@@ -57,31 +55,22 @@ from autorestvalidationtest.models import (
 class ValidationTests(unittest.TestCase):
 
     def test_constant_values(self):
-
-        config = AutoRestValidationTestConfiguration(
+        client = AutoRestValidationTest(
             "abc123",
             "12-34-5678",
             base_url="http://localhost:3000")
-        config.log_level = log_level
-        client = AutoRestValidationTest(config)
 
         client.get_with_constant_in_path()
 
-        # TODO: Const body should be built implicitly
         body = Product(child=ChildProduct())
-        body.const_child = ConstantProduct()
-
         product = client.post_with_constant_in_body(body=body)
         self.assertIsNotNone(product)
 
     def test_validation(self):
-
-        config = AutoRestValidationTestConfiguration(
+        client = AutoRestValidationTest(
             "abc123",
             "12-34-5678",
             base_url="http://localhost:3000")
-        config.log_level = log_level
-        client = AutoRestValidationTest(config)
 
         try:
             client.validation_of_method_parameters("1", 100)
@@ -121,7 +110,6 @@ class ValidationTests(unittest.TestCase):
 
         try:
             tempproduct=Product(child=ChildProduct(), capacity=0)
-            tempproduct.const_child=ConstantProduct()
             client.validation_of_body("123", 150, tempproduct)
         except ValidationError as err:
             self.assertEqual(err.rule, "minimum_ex")
@@ -129,7 +117,6 @@ class ValidationTests(unittest.TestCase):
 
         try:
             tempproduct=Product(child=ChildProduct(), capacity=100)
-            tempproduct.const_child=ConstantProduct()
             client.validation_of_body("123", 150, tempproduct)
         except ValidationError as err:
             self.assertEqual(err.rule, "maximum_ex")
@@ -138,21 +125,22 @@ class ValidationTests(unittest.TestCase):
         try:
             tempproduct=Product(child=ChildProduct(),
                 display_names=["item1","item2","item3","item4","item5","item6","item7"])
-            tempproduct.const_child=ConstantProduct()
             client.validation_of_body("123", 150, tempproduct)
         except ValidationError as err:
             self.assertEqual(err.rule, "max_items")
             self.assertEqual(err.target, "display_names")
 
-        config2 = AutoRestValidationTestConfiguration(
+        client2 = AutoRestValidationTest(
             "abc123",
             "abc",
             base_url="http://localhost:3000")
-        config2.log_level = log_level
-        client2 = AutoRestValidationTest(config2)
 
         try:
             client2.validation_of_method_parameters("123", 150)
         except ValidationError as err:
             self.assertEqual(err.rule, "pattern")
             self.assertEqual(err.target, "self.config.api_version")
+
+
+if __name__ == '__main__':
+    unittest.main()
