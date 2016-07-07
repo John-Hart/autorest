@@ -114,7 +114,7 @@ function which(
     if( $env:path ) {
         foreach( $dir in $env:path.Split(";")) {
             foreach( $ext in (";.ps1;"+$env:pathext).split(";")) {
-                if( $dir -and (resolve-path $dir) ) {
+                if( $dir -and (resolve-path $dir -ea 0 ) ) {
                     $p = join-path $dir "$cmd$ext"
                     if( exists $p ) { 
                         if( Validate -exe $p $arch $include $exclude $minimumVersion ) {
@@ -234,8 +234,8 @@ find-orAdd "msbuild.exe" -hint "Install Visual studio 2015"
 
 find-orAdd "javac.exe" -hint "Download and install JAVA JDK"
 
-find-orAdd "node.exe" -hint "See: https://nodejs.org"
-find-orAdd "gulp.cmd" -hint "maybe use 'npm install -g gulp'"
+find-orAdd "node.exe" -hint "See: https://nodejs.org" -folders @("${env:appdata}","${env:ProgramFiles(x86)}","${env:ProgramFiles}")
+find-orAdd "gulp.cmd" -hint "maybe use 'npm install -g gulp'" -folders @("${env:appdata}","${env:ProgramFiles(x86)}","${env:ProgramFiles}")
 
 find-orAdd "ruby.exe" (@() +  ((dir -ea 0 c:\ruby*).fullname) + @( "${env:ProgramFiles(x86)}","${env:ProgramFiles}","c:\tools")) -hint "see http://rubyinstaller.org/downloads/"
 
