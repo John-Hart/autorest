@@ -237,34 +237,34 @@ namespace AutoRest.CSharp
             switch (primaryType?.Type)
             {
                 case KnownPrimaryType.Base64Url:
-                primaryType.Name = "byte[]";
+                primaryType.Name = "System.Byte[]";
                     break;
                 case KnownPrimaryType.Boolean:
-                primaryType.Name = "bool";
+                primaryType.Name = "System.Boolean";
                     break;
                 case KnownPrimaryType.ByteArray:
-                primaryType.Name = "byte[]";
+                primaryType.Name = "System.Byte[]";
                     break;
                 case KnownPrimaryType.Date:
-                primaryType.Name = "DateTime";
+                primaryType.Name = "System.DateTime";
                     break;
                 case KnownPrimaryType.DateTime:
-                primaryType.Name = UseDateTimeOffset ? "DateTimeOffset" : "DateTime";
+                primaryType.Name = UseDateTimeOffset ? "System.DateTimeOffset" : "System.DateTime";
                     break;
                 case KnownPrimaryType.DateTimeRfc1123:
-                primaryType.Name = "DateTime";
+                primaryType.Name = "System.DateTime";
                     break;
                 case KnownPrimaryType.Double:
-                primaryType.Name = "double";
+                primaryType.Name = "System.Double";
                     break;
                 case KnownPrimaryType.Decimal:
-                primaryType.Name = "decimal";
+                primaryType.Name = "System.Decimal";
                     break;
                 case KnownPrimaryType.Int:
-                primaryType.Name = "int";
+                primaryType.Name = "System.Int32";
                     break;
                 case KnownPrimaryType.Long:
-                primaryType.Name = "long";
+                primaryType.Name = "System.Int64";
                     break;
                 case KnownPrimaryType.Stream:
                 primaryType.Name = "System.IO.Stream";
@@ -273,29 +273,29 @@ namespace AutoRest.CSharp
                     switch (KnownFormatExtensions.Parse( primaryType.Format ) )
             {
                         case KnownFormat.@char:
-                            primaryType.Name = "char";
+                            primaryType.Name = "System.char";
                             break;
 
                         default:
-                primaryType.Name = "string";
+                primaryType.Name = "System.String";
                             break;
             }
                     
                     break;
                 case KnownPrimaryType.TimeSpan:
-                primaryType.Name = "TimeSpan";
+                primaryType.Name = "System.TimeSpan";
                     break;
                 case KnownPrimaryType.Object:
-                primaryType.Name = "object";
+                primaryType.Name = "System.Object";
                     break;
                 case KnownPrimaryType.Credentials:
-                primaryType.Name = "ServiceClientCredentials";
+                primaryType.Name = "Microsoft.Rest.ServiceClientCredentials";
                     break;
                 case KnownPrimaryType.UnixTime:
-                primaryType.Name = "DateTime";
+                primaryType.Name = "System.DateTime";
                     break;
                 case KnownPrimaryType.Uuid:
-                primaryType.Name = "Guid";
+                primaryType.Name = "System.Guid";
                     break;
             }
 
@@ -309,7 +309,7 @@ namespace AutoRest.CSharp
             {
                 return new PrimaryType(KnownPrimaryType.String)
                 {
-                    Name = "string"
+                    Name = "System.string"
                 };
             }
             return NormalizeTypeDeclaration(type);
@@ -344,11 +344,11 @@ namespace AutoRest.CSharp
             sequenceType.ElementType = NormalizeTypeReference(sequenceType.ElementType);
             if (sequenceType.ElementType.IsValueType())
             {
-                sequenceType.NameFormat = "IList<{0}?>";
+                sequenceType.NameFormat = "System.Collections.Generic.IList<{0}?>";
             }
             else
             {
-                sequenceType.NameFormat = "IList<{0}>";
+                sequenceType.NameFormat = "System.Collections.Generic.IList<{0}>";
             }
             return sequenceType;
         }
@@ -358,11 +358,11 @@ namespace AutoRest.CSharp
             dictionaryType.ValueType = NormalizeTypeReference(dictionaryType.ValueType);
             if (dictionaryType.ValueType.IsValueType())
             {
-                dictionaryType.NameFormat = "IDictionary<string, {0}?>";
+                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<System.String, {0}?>";
             }
             else
             {
-                dictionaryType.NameFormat = "IDictionary<string, {0}>";
+                dictionaryType.NameFormat = "System.Collections.Generic.IDictionary<System.String, {0}>";
             }
             return dictionaryType;
         }

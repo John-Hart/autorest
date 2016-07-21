@@ -7,15 +7,6 @@
 @EmptyLine
 namespace @(Settings.Namespace).Models
 {
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-@foreach (var usingString in Model.Usings) {
-@:    using @usingString;
-}
 @EmptyLine
 
 @if (!string.IsNullOrEmpty(Model.Summary) || !string.IsNullOrWhiteSpace(Model.Documentation))
@@ -42,7 +33,7 @@ namespace @(Settings.Namespace).Models
 
     @if (Model.NeedsTransformationConverter)
     {
-    @:[JsonTransformation]
+    @:[Microsoft.Rest.Serialization.JsonTransformation]
     }
 
     public partial class @Model.Name@(Model.BaseModelType != null ? " : " + Model.BaseModelType.Name : "")
@@ -133,19 +124,19 @@ namespace @(Settings.Namespace).Models
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.Date))
             {
-        @:[JsonConverter(typeof(DateJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(DateJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.DateTimeRfc1123))
             {
-        @:[JsonConverter(typeof(DateTimeRfc1123JsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(DateTimeRfc1123JsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.Base64Url))
             {
-        @:[JsonConverter(typeof(Base64UrlJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Base64UrlJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.UnixTime))
             {
-        @:[JsonConverter(typeof(UnixTimeJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(UnixTimeJsonConverter))]
             }
 
             if (property.Type is DictionaryType && (property.Type as DictionaryType).SupportsAdditionalProperties)
@@ -154,7 +145,7 @@ namespace @(Settings.Namespace).Models
             }
             else
             {
-        @:[JsonProperty(PropertyName = "@property.SerializedName")]
+        @:[Newtonsoft.Json.JsonProperty(PropertyName = "@property.SerializedName")]
             }
         @:public @property.Type.Name @property.Name { get; @(property.IsReadOnly ? "private " : "")set; }
         @EmptyLine
@@ -190,7 +181,7 @@ namespace @(Settings.Namespace).Models
         @:/// <summary>
         @:/// Validate the object.
         @:/// </summary>
-        @:/// <exception cref="ValidationException">
+        @:/// <exception cref="Microsoft.Rest.ValidationException">
         @:/// Thrown if validation fails
         @:/// </exception>
         @:public @Model.MethodQualifier void Validate()
@@ -208,7 +199,7 @@ namespace @(Settings.Namespace).Models
                 anythingToValidate = true;
             @:if (@property.Name == null)
             @:{
-                @:throw new ValidationException(ValidationRules.CannotBeNull, "@property.Name");
+                @:throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.CannotBeNull, "@property.Name");
             @:}
             @:
             }

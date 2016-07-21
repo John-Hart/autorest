@@ -473,7 +473,7 @@ namespace AutoRest.CSharp
                     {
                         sb.AppendLine("if ({0})", constraintCheck)
                             .AppendLine("{").Indent()
-                            .AppendLine("throw new ValidationException(ValidationRules.{0}, \"{1}\", {2});",
+                            .AppendLine("throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.{0}, \"{1}\", {2});",
                                 constraint, valueReference.Replace("this.", ""), constraintValue).Outdent()
                             .AppendLine("}");
                     }
@@ -481,7 +481,7 @@ namespace AutoRest.CSharp
                     {
                         sb.AppendLine("if ({0})", constraintCheck)
                             .AppendLine("{").Indent()
-                            .AppendLine("throw new ValidationException(ValidationRules.{0}, \"{1}\");",
+                            .AppendLine("throw new Microsoft.Rest.ValidationException(Microsoft.Rest.ValidationRules.{0}, \"{1}\");",
                                 constraint, valueReference.Replace("this.", "")).Outdent()
                             .AppendLine("}");
                     }
