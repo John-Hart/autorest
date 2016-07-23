@@ -7,6 +7,7 @@
 @EmptyLine
 namespace @(Settings.Namespace).Models
 {
+    using System.Linq;
 @EmptyLine
 
 @if (!string.IsNullOrEmpty(Model.Summary) || !string.IsNullOrWhiteSpace(Model.Documentation))
@@ -28,7 +29,7 @@ namespace @(Settings.Namespace).Models
 
     @if (Model.NeedsPolymorphicConverter)
     {
-    @:[JsonObject("@Model.SerializedName")]
+    @:[Newtonsoft.Json.JsonObject("@Model.SerializedName")]
     }
 
     @if (Model.NeedsTransformationConverter)
@@ -124,24 +125,24 @@ namespace @(Settings.Namespace).Models
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.Date))
             {
-        @:[Newtonsoft.Json.JsonConverter(typeof(DateJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Microsoft.Rest.Serialization.DateJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.DateTimeRfc1123))
             {
-        @:[Newtonsoft.Json.JsonConverter(typeof(DateTimeRfc1123JsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Microsoft.Rest.Serialization.DateTimeRfc1123JsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.Base64Url))
             {
-        @:[Newtonsoft.Json.JsonConverter(typeof(Base64UrlJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Microsoft.Rest.Serialization.Base64UrlJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.UnixTime))
             {
-        @:[Newtonsoft.Json.JsonConverter(typeof(UnixTimeJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Microsoft.Rest.Serialization.UnixTimeJsonConverter))]
             }
 
             if (property.Type is DictionaryType && (property.Type as DictionaryType).SupportsAdditionalProperties)
             {
-        @:[JsonExtensionData]
+        @:[Newtonsoft.Json.JsonExtensionData]
             }
             else
             {
@@ -158,21 +159,21 @@ namespace @(Settings.Namespace).Models
         @:/// </summary>
             if (property.Type.IsPrimaryType(KnownPrimaryType.Date))
             {
-        @:[JsonConverter(typeof(DateJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(DateJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.DateTimeRfc1123))
             {
-        @:[JsonConverter(typeof(DateTimeRfc1123JsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(DateTimeRfc1123JsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.Base64Url))
             {
-        @:[JsonConverter(typeof(Base64UrlJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(Base64UrlJsonConverter))]
             }
             if (property.Type.IsPrimaryType(KnownPrimaryType.UnixTime))
             {
-        @:[JsonConverter(typeof(UnixTimeJsonConverter))]
+        @:[Newtonsoft.Json.JsonConverter(typeof(UnixTimeJsonConverter))]
             }
-        @:[JsonProperty(PropertyName = "@property.SerializedName")]
+        @:[Newtonsoft.Json.JsonProperty(PropertyName = "@property.SerializedName")]
         @:public static @property.Type.Name @property.Name { get; private set; }
         @EmptyLine
         }

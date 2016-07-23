@@ -176,7 +176,7 @@ else
         if (Model.RequestBody.Type.IsPrimaryType(KnownPrimaryType.Stream))
         {
         <text>
-    StreamContent _fileStreamContent = new StreamContent(@(Model.RequestBody.Name));
+     System.Net.Http.StreamContent _fileStreamContent = new System.Net.Http.StreamContent(@(Model.RequestBody.Name));
     _httpRequest.Content = _fileStreamContent;
     _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("@(Model.RequestContentType)");
         </text>
@@ -203,7 +203,7 @@ else
     else if (Model.LogicalParameters.Where(p => p.Location == ParameterLocation.FormData).Any())
     {
         <text>
-    MultipartFormDataContent _multiPartContent = new MultipartFormDataContent();
+    System.Net.Http.MultipartFormDataContent _multiPartContent = new System.Net.Http.MultipartFormDataContent();
         </text>
         foreach (var parameter in Model.LogicalParameterTemplateModels.Where(p => p.Location == ParameterLocation.FormData))
         {
@@ -212,12 +212,12 @@ else
             if (parameter.Type.IsPrimaryType(KnownPrimaryType.Stream))
             {
         <text>        
-        StreamContent _@parameter.Name = new StreamContent(@parameter.Name);
-        _@(parameter.Name).Headers.ContentType = newSystem.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+         System.Net.Http.StreamContent _@parameter.Name = new System.Net.Http.StreamContent(@parameter.Name);
+        _@(parameter.Name).Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
         System.IO.FileStream _@(parameter.Name)AsFileStream = @parameter.Name as System.IO.FileStream;
         if (_@(parameter.Name)AsFileStream != null)
         {
-            ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+            System.Net.Http.Headers.ContentDispositionHeaderValue _contentDispositionHeaderValue = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
             _contentDispositionHeaderValue.Name = "@(parameter.SerializedName)";
             _contentDispositionHeaderValue.FileName = _@(parameter.Name)AsFileStream.Name;
             _@(parameter.Name).Headers.ContentDisposition = _contentDispositionHeaderValue;        
@@ -259,7 +259,7 @@ else
     }
     else
     {
-    @:_httpResponse = await @(Model.ClientReference).HttpClient.SendAsync(_httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+    @:_httpResponse = await @(Model.ClientReference).HttpClient.SendAsync(_httpRequest, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
     }
     if (_shouldTrace)
     {
@@ -382,7 +382,7 @@ else
     @:    {
     @:        _httpResponse.Dispose();
     @:    }
-    @:    throw new SerializationException("Unable to deserialize the response.", _defaultResponseContent, ex);
+    @:    throw new Microsoft.Rest.SerializationException("Unable to deserialize the response.", _defaultResponseContent, ex);
     @:}
         }
     }
@@ -392,7 +392,7 @@ else
 
     @:try
     @:{
-        @:_result.Headers = _httpResponse.GetHeadersAsJson().ToObject<@(Model.ReturnType.Headers.Name)>(JsonSerializer.Create(@(Model.GetDeserializationSettingsReference(Model.DefaultResponse.Body))));
+        @:_result.Headers = _httpResponse.GetHeadersAsJson().ToObject<@(Model.ReturnType.Headers.Name)>(Newtonsoft.Json.JsonSerializer.Create(@(Model.GetDeserializationSettingsReference(Model.DefaultResponse.Body))));
     @:}
     @:catch (Newtonsoft.Json.JsonException ex)
     @:{
@@ -401,7 +401,7 @@ else
     @:    {
     @:        _httpResponse.Dispose();
     @:    }
-    @:    throw new SerializationException("Unable to deserialize the headers.", _httpResponse.GetHeadersAsJson().ToString(), ex);
+    @:    throw new Microsoft.Rest.SerializationException("Unable to deserialize the headers.", _httpResponse.GetHeadersAsJson().ToString(), ex);
     @:}
     }
 

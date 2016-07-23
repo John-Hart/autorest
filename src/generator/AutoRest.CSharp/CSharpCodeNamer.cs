@@ -273,7 +273,7 @@ namespace AutoRest.CSharp
                     switch (KnownFormatExtensions.Parse( primaryType.Format ) )
             {
                         case KnownFormat.@char:
-                            primaryType.Name = "System.char";
+                            primaryType.Name = "System.Char";
                             break;
 
                         default:
@@ -309,7 +309,7 @@ namespace AutoRest.CSharp
             {
                 return new PrimaryType(KnownPrimaryType.String)
                 {
-                    Name = "System.string"
+                    Name = "System.String"
                 };
             }
             return NormalizeTypeDeclaration(type);
@@ -402,7 +402,7 @@ namespace AutoRest.CSharp
                             primaryType.Type == KnownPrimaryType.UnixTime)
                         {
 
-                            return "SafeJsonConvert.DeserializeObject<" + primaryType.Name.TrimEnd('?') +
+                            return "Microsoft.Rest.Serialization.SafeJsonConvert.DeserializeObject<" + primaryType.Name.TrimEnd('?') +
                                 ">(" + CodeNamer.QuoteValue("\"" + defaultValue + "\"") + ", this.Client.SerializationSettings)";
                         }
                     }

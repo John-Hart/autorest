@@ -213,7 +213,7 @@ namespace AutoRest.CSharp.Azure.TemplateModels
                     this.ReturnType.Body != null)
                 {
                     HttpStatusCode code = this.Responses.Keys.FirstOrDefault(AzureExtensions.HttpHeadStatusCodeSuccessFunc);
-                    sb.AppendFormat("_result.Body = (_statusCode == HttpStatusCode.{0});", code.ToString()).AppendLine();
+                    sb.AppendFormat("_result.Body = (_statusCode == System.Net.HttpStatusCode.{0});", code.ToString()).AppendLine();
                 }
                 sb.AppendLine("if (_httpResponse.Headers.Contains(\"{0}\"))", this.RequestIdString)
                     .AppendLine("{").Indent()

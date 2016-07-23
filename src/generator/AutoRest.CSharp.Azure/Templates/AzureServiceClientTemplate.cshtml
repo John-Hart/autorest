@@ -10,6 +10,7 @@
 @EmptyLine
 namespace @Settings.Namespace
 {
+    using System.Linq;
 @foreach (var usingString in Model.Usings) {
 @:    using @usingString;
 }
@@ -84,8 +85,8 @@ namespace @Settings.Namespace
             };
             @foreach (var polymorphicType in Model.ModelTypes.Where(t => t.PolymorphicDiscriminator != null))
             {
-            @:SerializationSettings.Converters.Add(new PolymorphicSerializeJsonConverter<@(polymorphicType.Name)>("@(polymorphicType.PolymorphicDiscriminator)"));
-            @:DeserializationSettings.Converters.Add(new PolymorphicDeserializeJsonConverter<@(polymorphicType.Name)>("@(polymorphicType.PolymorphicDiscriminator)"));
+            @:SerializationSettings.Converters.Add(new Microsoft.Rest.Serialization.PolymorphicSerializeJsonConverter<@(polymorphicType.Name)>("@(polymorphicType.PolymorphicDiscriminator)"));
+            @:DeserializationSettings.Converters.Add(new Microsoft.Rest.Serialization.PolymorphicDeserializeJsonConverter<@(polymorphicType.Name)>("@(polymorphicType.PolymorphicDiscriminator)"));
             }
 
             CustomInitialize();
