@@ -237,13 +237,13 @@ namespace AutoRest.CSharp
             switch (primaryType?.Type)
             {
                 case KnownPrimaryType.Base64Url:
-                primaryType.Name = "System.Byte[]";
+                primaryType.Name = "byte[]";
                     break;
                 case KnownPrimaryType.Boolean:
-                primaryType.Name = "System.Boolean";
+                primaryType.Name = "bool";
                     break;
                 case KnownPrimaryType.ByteArray:
-                primaryType.Name = "System.Byte[]";
+                primaryType.Name = "byte[]";
                     break;
                 case KnownPrimaryType.Date:
                 primaryType.Name = "System.DateTime";
@@ -255,16 +255,16 @@ namespace AutoRest.CSharp
                 primaryType.Name = "System.DateTime";
                     break;
                 case KnownPrimaryType.Double:
-                primaryType.Name = "System.Double";
+                primaryType.Name = "double";
                     break;
                 case KnownPrimaryType.Decimal:
-                primaryType.Name = "System.Decimal";
+                primaryType.Name = "decimal";
                     break;
                 case KnownPrimaryType.Int:
-                primaryType.Name = "System.Int32";
+                primaryType.Name = "int";
                     break;
                 case KnownPrimaryType.Long:
-                primaryType.Name = "System.Int64";
+                primaryType.Name = "long";
                     break;
                 case KnownPrimaryType.Stream:
                 primaryType.Name = "System.IO.Stream";
@@ -273,11 +273,11 @@ namespace AutoRest.CSharp
                     switch (KnownFormatExtensions.Parse( primaryType.Format ) )
             {
                         case KnownFormat.@char:
-                            primaryType.Name = "System.Char";
+                            primaryType.Name = "char";
                             break;
 
                         default:
-                primaryType.Name = "System.String";
+                primaryType.Name = "string";
                             break;
             }
                     
@@ -286,7 +286,7 @@ namespace AutoRest.CSharp
                 primaryType.Name = "System.TimeSpan";
                     break;
                 case KnownPrimaryType.Object:
-                primaryType.Name = "System.Object";
+                primaryType.Name = "object";
                     break;
                 case KnownPrimaryType.Credentials:
                 primaryType.Name = "Microsoft.Rest.ServiceClientCredentials";
